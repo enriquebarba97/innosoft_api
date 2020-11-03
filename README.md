@@ -11,7 +11,7 @@ Innosoft-api es un proyecto para la gestión y automatización del programa de l
  - [Miguel Ángel Pantoja Bas](https://github.com/miguelpantoja89)
  - [Moisés Pantión Loza](https://github.com/Moipanloz)
  - [Enrique Barba Roque](https://github.com/enriquebarba97)
- - Manuel Sánchez Rodríguez
+ - [Manuel Sánchez Rodríguez](https://github.com/mansanrod4)
 
 ## INSTALACIÓN
 
