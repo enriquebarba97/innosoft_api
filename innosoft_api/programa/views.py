@@ -1,13 +1,28 @@
 #from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework import generics
 # Create your views here.
-from .models import Ponente
+from .models import *
+from .serializers import *
 
-def getPonentes(request):
-  users = Ponente.objects.all()
-  data = list(users.values("id","name","age"))
-  return JsonResponse(data, safe=False)
+class PonenteView(generics.ListCreateAPIView):
+  queryset = Ponente.objects.all()
+  serializer_class = PonenteSerializer
 
-def getPonenteById(request, param):
-  data = Ponente.objects.filter(id=param)
-  return JsonResponse(list(data.values("id","name","age")),safe=False)
+class PonenteRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+  #lookup_field = 'id'
+  queryset = Ponente.objects.all()
+  serializer_class = PonenteSerializer
+  
+
+class PonenciaView(generics.ListCreateAPIView):
+  queryset = Ponencia.objects.all()
+  serializer_class = PonenciaSerializer
+
+class PonenciaRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+  #lookup_field = 'id'
+  queryset = Ponencia.objects.all()
+  serializer_class = PonenciaSerializer
+
+# def getPonenteById(request, param):
+#   data = Ponente.objects.filter(id=param)
+#   return JsonResponse(list(data.values("id","name","age")),safe=False)
