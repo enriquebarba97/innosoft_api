@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin 
-from .models import Ponente 
+from .models import *
 
-admin.site.register(Ponente) 
+admin.site.register(Ponente)
+admin.site.register(Ponencia)
