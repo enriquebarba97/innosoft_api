@@ -1,5 +1,4 @@
-name: Django CI
-
+name: Django Tests
 on:
   push:
     branches: [ develop ]
@@ -27,5 +26,5 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-      	cd innosoft_api
-      	python manage.py test       
+        cd innosoft_api/
+        python ./manage.py test
