@@ -1,4 +1,6 @@
-﻿# INNOSOFT-API
+# INNOSOFT-API
+
+![](https://github.com/enriquebarba97/innosoft_api/workflows/Django%20Tests/badge.svg)
 
 ## INTRODUCCIÓN
 
