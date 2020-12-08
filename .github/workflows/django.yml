@@ -27,4 +27,5 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python ./innosoft_api/manage.py test       
+      	cd innosoft_api
+      	python manage.py test       
