@@ -16,17 +16,17 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: Install Dependencies
+    - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run Tests
+        pip install codacy-coverage
+        export CODACY_PROJECT_TOKEN=${{secrets.CODACY_PROJECT_TOKEN}}
+    - name: Ejecutar Tests
       run: |
         cd innosoft_api/
         coverage run --source=. ./manage.py test
         coverage xml
     - name: Enviar datos de cobertura a Codacy
-      uses: codacy/codacy-coverage-reporter-action@0.2.0
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: innosoft_api/coverage.xml
+      run: python-codacy-coverage -r innosoft_api/coverage.xml
+      
