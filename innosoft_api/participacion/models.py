@@ -7,7 +7,7 @@ from programa.models import Ponencia
 from django.contrib.auth.models import User
 
 class Asistencia(models.Model):
-    asiste = models.BooleanField(null=False)
+    asiste = models.BooleanField(default=False, null=False)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     ponencia = models.ForeignKey(Ponencia, on_delete=models.CASCADE)
     

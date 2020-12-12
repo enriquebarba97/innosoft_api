@@ -6,11 +6,19 @@ from rest_framework import generics
 
 # Create your views here.
 
-class AsistenciaView(generics.ListCreateAPIView):
+class AsistenciaCreateView(generics.CreateAPIView):
+    queryset = Asistencia.objects.all()
+    serializer_class = AsistenciaCreateSerializer
+
+class AsistenciaRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaSerializer
 
-class AsistenciaRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+class AsistenciaCheckView(generics.UpdateAPIView):
+    queryset = Asistencia.objects.all()
+    serializer_class = AsistenciaCheckSerializer
+
+class AsistenciaView(generics.ListAPIView):
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaSerializer
 
