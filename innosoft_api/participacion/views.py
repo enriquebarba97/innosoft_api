@@ -22,4 +22,18 @@ class AsistenciaView(generics.ListAPIView):
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaSerializer
 
+class AsistenciaUsuarioView(generics.ListAPIView):
+    serializer_class = AsistenciaSerializer
+    
+    def get_queryset(self):
+        usuario = self.kwargs["int"]
+        return Asistencia.objects.filter( usuario = usuario)
+
+class AsistenciaPonenciaView(generics.ListAPIView):
+    serializer_class = AsistenciaSerializer
+
+    def get_queryset(self):
+        ponencia = self.kwargs["int"]
+        return Asistencia.objects.filter( ponencia = ponencia)
+
 
