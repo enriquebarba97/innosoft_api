@@ -16,7 +16,7 @@ class ListUserSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(serializers.ModelSerializer):
 	class Meta: 
-		model = User 
+		model = User
 		fields = ('id','uvus','email','first_name','last_name','password','groups')
 		
 		
