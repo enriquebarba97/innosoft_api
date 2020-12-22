@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from .models import Asistencia
-from .serializers import *
+from participacion.serializers import *
 from rest_framework import generics
 
 
@@ -24,7 +23,7 @@ class AsistenciaView(generics.ListAPIView):
 
 class AsistenciaUsuarioView(generics.ListAPIView):
     serializer_class = AsistenciaSerializer
-    
+
     def get_queryset(self):
         usuario = self.kwargs["int"]
         return Asistencia.objects.filter( usuario = usuario)

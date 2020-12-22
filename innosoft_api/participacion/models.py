@@ -10,11 +10,13 @@ class Asistencia(models.Model):
     asiste = models.BooleanField(default=False, null=False)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     ponencia = models.ForeignKey(Ponencia, on_delete=models.CASCADE)
-    
+
     class Meta:
-           unique_together = ["ponencia", "usuario"]
-    
+        """docstring"""
+        unique_together = ["ponencia", "usuario"]
+
     def __str__(self):
+        """docstring"""
         return str(self.usuario) + toString(self.asiste) + " a " + str(self.ponencia)
 
 
