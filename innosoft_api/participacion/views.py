@@ -35,4 +35,9 @@ class AsistenciaPonenciaView(generics.ListAPIView):
         ponencia = self.kwargs["int"]
         return Asistencia.objects.filter( ponencia = ponencia)
 
+class AsistenciaQRView(generics.RetrieveAPIView):
+    serializer_class = AsistenciaQRSerializer
+    queryset = Asistencia.objects.all()
+
+
 

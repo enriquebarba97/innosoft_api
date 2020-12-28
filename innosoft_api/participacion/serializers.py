@@ -21,3 +21,9 @@ def update(self, instance, validated_data):
     instance.asiste = True
     instance.save()
     return instance
+
+
+class AsistenciaQRSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Asistencia
+        fields = ["qr_b64"]
