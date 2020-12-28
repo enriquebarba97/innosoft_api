@@ -4,6 +4,7 @@ env
 __pycache__
 innosoft_api/.vscode/
 **/migrations/*
+*.sqlite3
 
 # Unit test / coverage reports
 htmlcov/
