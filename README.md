@@ -1,4 +1,7 @@
-﻿# INNOSOFT-API
+# INNOSOFT-API
+
+![](https://github.com/enriquebarba97/innosoft_api/workflows/Django%20Tests/badge.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bac4b8376e0b427ba8763fe6c6ee7d6c)](https://app.codacy.com/gh/enriquebarba97/innosoft_api?utm_source=github.com&utm_medium=referral&utm_content=enriquebarba97/innosoft_api&utm_campaign=Badge_Grade)
 
 ## INTRODUCCIÓN
 
