@@ -17,7 +17,7 @@ class PonenteTests(APITestCase):
 
 
 
-    def test_crear_ponente(self):
+    def crear_ponente(self):
         """
         Aseguramos que se puede crear una entidad Ponente.
         """

@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group
 from .models import User
 
 
+
 class BaseTestCase(APITestCase):
     def setUp(self):
         GROUPS = ['administrador','moderador','staff','participante']
@@ -83,3 +84,85 @@ class RegistroTests(BaseTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.remove_token()
+
+### Test Update and Show ####
+    def test_update_alumno_permiso(self):
+        """
+        Test para actualizar un usuario siendo un usuario registrado administrador
+        """
+        self.get_token()
+        url = reverse('update_delete_users', args=[3])
+        data = {
+    "id": "3",
+    "uvus": "antferman2",
+    "email": "moderador32@mod.es",
+    "first_name": "modsurn4",
+    "last_name": "prueba3",
+    "groups": [  
+    ]
+}
+        response = self.client.put(url, data)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(User.objects.get(uvus="antferman2").last_name,"prueba3")
+        self.remove_token()
+    def test_update_alumno_sinpermiso(self):
+        """
+        Test para comprobar que no se puede actualizar un usuario siendo un participante
+        """
+        self.get_token(uvus="participante")
+        url = reverse('update_delete_users', args=[3])
+        data = {
+    "id": "3",
+    "uvus": "antferman2",
+    "email": "moderador32@mod.es",
+    "first_name": "modsurn4",
+    "last_name": "prueba3",
+    "groups": [  
+    ]
+}
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, 403)
+        self.remove_token()
+        
+
+    def test_ver_alumno_permiso(self):
+        """
+        Comprobar que deja acceso a show user siendo un usuario administrador
+        """
+        self.get_token()
+        url = reverse('update_delete_users',kwargs={"pk":"3"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        usuario = User.objects.get(pk=3)
+        self.assertEqual(response.data['uvus'],usuario.uvus)
+        self.assertEqual(response.data['email'],usuario.email)
+        self.assertEqual(response.data['first_name'],usuario.first_name)
+        self.assertEqual(response.data['last_name'],usuario.last_name)
+        self.remove_token()
+    def test_ver_alumno_sinpermiso(self):
+        """
+        Ahora se comprueba que no se tiene acceso con un usuario alumno que es participante
+        """
+        self.get_token(uvus="participante")
+        url = reverse('update_delete_users',kwargs={"pk":"3"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+        self.remove_token()
+
+    def test_delete_alumno_permiso(self):
+        """
+        Test para eliminar un usuario siendo administrador
+        """
+        self.get_token()
+        url = reverse('update_delete_users',kwargs={"pk":"3"})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 204)
+    def test_delete_alumno_sinpermiso(self):
+        """
+        Test para eliminar un usuario siendo participante
+        """
+        self.get_token(uvus="participante")
+        url = reverse('update_delete_users',kwargs={"pk":"3"})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 403)
