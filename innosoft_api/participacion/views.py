@@ -3,10 +3,12 @@ from participacion.serializers import *
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from .cryptography import encrypt, decrypt
 from .qr_base64 import qr_in_base64
 import ast
+from .permissions import IsAdminUser
+from rest_framework.authentication import TokenAuthentication
 
 
 # Create your views here.
@@ -39,6 +41,8 @@ class AsistenciaPonenciaView(generics.ListAPIView):
 
 
 @api_view(['POST'])
+#@authentication_classes([TokenAuthentication])
+#@permission_classes([IsAdminUser])
 def asistencia_qr_check(request):
     
     if "code" in request.data:
@@ -74,6 +78,8 @@ def asistencia_qr_check(request):
         return Response("No se aportó ningun QR", status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+#@authentication_classes([TokenAuthentication])
+#@permission_classes([IsAdminUser])
 def asistencia_qr(request, pk):
 
     try:
