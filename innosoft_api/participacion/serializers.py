@@ -14,8 +14,3 @@ class AsistenciaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asistencia
         fields = ['usuario', 'ponencia', 'id']
-
-class AsistenciaQRSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Asistencia
-        fields = ["qr_b64"]

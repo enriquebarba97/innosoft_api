@@ -5,14 +5,13 @@ from programa.models import Ponencia
 
 #Eliminar cuando este importado el custom user
 from django.contrib.auth.models import User
-from .qr_base64 import qr_in_base64
+from .cryptography import encrypt, decrypt
 
 class Asistencia(models.Model):
     asiste = models.BooleanField(default=False, null=False)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     ponencia = models.ForeignKey(Ponencia, on_delete=models.CASCADE)
-    #qr = models.ImageField(blank=True, upload_to="qr_codes")
-    qr_b64 = models.TextField(blank=True, unique=True)
+    code = models.TextField(blank=True, unique=True)
 
     class Meta:
         """docstring"""
@@ -26,11 +25,11 @@ class Asistencia(models.Model):
 
         uncoded_string = "Usuario%s Ponencia%s" % (self.usuario.pk, self.ponencia.pk)
 
-        self.qr_b64 = qr_in_base64(uncoded_string)
+        password = str(self.usuario.id) + "" + str(self.ponencia.id)
 
-        #TODO
-        #coded_string = encode (uncoded_string)
-        #self.qr_b64 = qr_in_base64(coded_string)
+        coded_bytes = encrypt (uncoded_string, password)
+
+        self.code = coded_bytes
 
         super().save(*args, **kwargs)
 
