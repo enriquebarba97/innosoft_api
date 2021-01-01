@@ -1,7 +1,6 @@
 from Crypto.Cipher import DES
 
 def encrypt (text, password):
-    
     padded_password = ""+password
     
     while len(padded_password)%8 != 0:
@@ -18,7 +17,7 @@ def encrypt (text, password):
     return res
 
 
-def decrypt (bytes, password):
+def decrypt (encrypted_bytes, password):
 
     padded_password = ""+password
     
@@ -27,6 +26,6 @@ def decrypt (bytes, password):
 
     des=DES.new(padded_password.encode("utf-8"), DES.MODE_ECB)
 
-    res = des.decrypt(bytes)
+    res = des.decrypt(encrypted_bytes)
 
     return res

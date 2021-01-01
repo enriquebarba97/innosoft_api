@@ -5,7 +5,7 @@ from programa.models import Ponencia
 
 #Eliminar cuando este importado el custom user
 from django.contrib.auth.models import User
-from .cryptography import encrypt, decrypt
+from .cryptography import encrypt
 
 class Asistencia(models.Model):
     asiste = models.BooleanField(default=False, null=False)
@@ -21,7 +21,8 @@ class Asistencia(models.Model):
         """docstring"""
         return str(self.usuario) + toString(self.asiste) + " a " + str(self.ponencia)
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
 
         uncoded_string = "Usuario%s Ponencia%s" % (self.usuario.pk, self.ponencia.pk)
 
@@ -31,7 +32,7 @@ class Asistencia(models.Model):
 
         self.code = coded_bytes
 
-        super().save(*args, **kwargs)
+        super().save(self, force_insert, force_update, using, update_fields)
 
 
 def toString(self):

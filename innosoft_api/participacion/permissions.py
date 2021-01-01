@@ -14,9 +14,7 @@ def _has_group_permission(user, required_groups):
 
 
 class IsLoggedInUserOrAnonymous(permissions.BasePermission):
-    """
-    Permite acceder a todos los usuarios tanto anonimos como los registrados
-    """
+    """Permite acceder a todos los usuarios tanto anonimos como los registrados"""
     required_groups = ['administrador']
 
     def has_object_permission(self, request, view, obj):
@@ -26,9 +24,7 @@ class IsLoggedInUserOrAnonymous(permissions.BasePermission):
         return obj == request.user or has_group_permission
 
 class AdminPass(permissions.BasePermission):
-    """
-    Permite acceder solo a usuarios de tipo administrados
-    """
+    """Permite acceder solo a usuarios de tipo administrados"""
     required_groups = ['administrador']
 
     def has_permission(self, request, view):
@@ -36,9 +32,7 @@ class AdminPass(permissions.BasePermission):
         return request.user and has_group_permission
 
 class IsAdminUser(permissions.BasePermission):
-    """
-    Permite acceder solo a de tipo administrador, moderador o staff
-    """
+    """Permite acceder solo a de tipo administrador, moderador o staff"""
     required_groups = ['administrador','moderador','staff']
 
     def has_permission(self, request, view):

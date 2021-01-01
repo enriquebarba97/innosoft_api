@@ -4,7 +4,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from .cryptography import encrypt, decrypt
+from .cryptography import decrypt
 from .qr_base64 import qr_in_base64
 import ast
 from .permissions import IsAdminUser
@@ -44,7 +44,6 @@ class AsistenciaPonenciaView(generics.ListAPIView):
 #@authentication_classes([TokenAuthentication])
 #@permission_classes([IsAdminUser])
 def asistencia_qr_check(request):
-    
     if "code" in request.data:
         encrypted_code = request.data["code"]
 

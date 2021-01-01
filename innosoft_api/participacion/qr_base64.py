@@ -4,7 +4,6 @@ import io
 
 def qr_in_base64(value):
         """Deuelve el código QR del valor, codificado en Base64"""
-
         qr_image = qrcode.make(value)
 
         imgBytes = io.BytesIO()
