@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from participacion.models import Asistencia
+from .models import Asistencia
+from django.core.exceptions import ObjectDoesNotExist
+import traceback
+from django.http.response import Http404
 
 class AsistenciaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,17 +14,6 @@ class AsistenciaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asistencia
         fields = ['usuario', 'ponencia', 'id']
-
-class AsistenciaCheckSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Asistencia
-        fields = []
-
-def update(self, instance, validated_data):
-    instance.asiste = True
-    instance.save()
-    return instance
-
 
 class AsistenciaQRSerializer(serializers.ModelSerializer):
     class Meta:

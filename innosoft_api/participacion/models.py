@@ -12,7 +12,7 @@ class Asistencia(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     ponencia = models.ForeignKey(Ponencia, on_delete=models.CASCADE)
     #qr = models.ImageField(blank=True, upload_to="qr_codes")
-    qr_b64 = models.TextField(blank=True)
+    qr_b64 = models.TextField(blank=True, unique=True)
 
     class Meta:
         """docstring"""
