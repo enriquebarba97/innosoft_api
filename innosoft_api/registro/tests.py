@@ -72,7 +72,31 @@ class RegistroTests(BaseTestCase):
         alum3.save()
         alum3.groups.add(Group.objects.get(name="participante"))
 
-    def test_ver_alumnos(self):
+    def test_ver_alumnos_permiso(self):
+        url = reverse('list_users')
+
+        self.get_token()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.remove_token()
+        self.assertDictContainsSubset({"count":7}, response.data)
+
+        response_5 = response.data["results"][4]
+        response_6 = response.data["results"][5]
+
+        test_alum_5 = User.objects.get(pk=5)
+        test_alum_6 = User.objects.get(pk=6)
+
+        self.assertEqual(response_5["uvus"], test_alum_5.uvus)
+        self.assertEqual(response_5["first_name"], test_alum_5.first_name)
+        self.assertEqual(response_5["last_name"], test_alum_5.last_name)
+
+        self.assertEqual(response_6["uvus"], test_alum_6.uvus)
+        self.assertEqual(response_6["first_name"], test_alum_6.first_name)
+        self.assertEqual(response_6["last_name"], test_alum_6.last_name)
+
+    
+    def test_ver_alumnos_sinpermiso(self):
         url = reverse('list_users')
 
         self.get_token(uvus="participante")
@@ -80,9 +104,59 @@ class RegistroTests(BaseTestCase):
         self.assertEqual(response.status_code,403)
         self.remove_token()
 
+    def test_create_alumno_permiso(self):
+        """
+        Test para crear un usuario siendo un usuario registrado administrador
+        """
         self.get_token()
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        url = reverse('auth_register')
+        data = {
+    "uvus": "enrbarroq",
+    "email": "enrbarroq@mod.es",
+    "first_name": "Enrique",
+    "last_name": "Barba",
+    "password": "qwerty",
+    "groups": [
+        1
+    ]
+}
+        response = self.client.post(url, data)
+        
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(User.objects.get(uvus="enrbarroq").last_name,"Barba")
+        self.remove_token()
+
+    def test_create_alumno_sinpermiso(self):
+        """
+        Test para crear un usuario siendo un usuario sin permisos de edicion
+        """
+        url = reverse('auth_register')
+        data = {
+    "uvus": "enrbarroq",
+    "email": "enrbarroq@mod.es",
+    "first_name": "Enrique",
+    "last_name": "Barba",
+    "password": "qwerty",
+    "groups": [
+        1
+    ]
+}
+        self.get_token(uvus="participante")
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, 403)
+        self.remove_token()
+
+        self.get_token(uvus="moder")
+        response = self.client.post(url, data)
+        
+        self.assertEqual(response.status_code, 403)
+        self.remove_token()
+
+        self.get_token(uvus="staff")
+        response = self.client.post(url, data)
+        
+        self.assertEqual(response.status_code, 403)
         self.remove_token()
 
 ### Test Update and Show ####
@@ -110,7 +184,6 @@ class RegistroTests(BaseTestCase):
         """
         Test para comprobar que no se puede actualizar un usuario siendo un participante
         """
-        self.get_token(uvus="participante")
         url = reverse('update_delete_users', args=[3])
         data = {
     "id": "3",
@@ -121,6 +194,17 @@ class RegistroTests(BaseTestCase):
     "groups": [  
     ]
 }
+        self.get_token(uvus="participante")
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, 403)
+        self.remove_token()
+
+        self.get_token(uvus="moder")
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, 403)
+        self.remove_token()
+
+        self.get_token(uvus="staff")
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, 403)
         self.remove_token()
@@ -140,6 +224,8 @@ class RegistroTests(BaseTestCase):
         self.assertEqual(response.data['first_name'],usuario.first_name)
         self.assertEqual(response.data['last_name'],usuario.last_name)
         self.remove_token()
+
+
     def test_ver_alumno_sinpermiso(self):
         """
         Ahora se comprueba que no se tiene acceso con un usuario alumno que es participante
