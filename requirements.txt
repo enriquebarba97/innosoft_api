@@ -4,3 +4,6 @@ django-phone-field==1.8.1
 django-rest-auth==0.9.5
 djoser==2.1.0
 coverage==5.3
+pycryptodome==3.9.9
+qrcode==6.1
+Pillow==8.0.1
