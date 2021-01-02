@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from programa.models import Ponencia
 from registro.models import User
 from .cryptography import encrypt
@@ -6,7 +7,7 @@ from .cryptography import encrypt
 
 class Asistencia(models.Model):
     asiste = models.BooleanField(default=False, null=False)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ponencia = models.ForeignKey(Ponencia, on_delete=models.CASCADE)
     code = models.TextField(blank=True, unique=True)
 

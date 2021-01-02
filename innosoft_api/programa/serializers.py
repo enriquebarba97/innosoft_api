@@ -11,7 +11,7 @@ class PonenciaSerializer(serializers.ModelSerializer):
 #    datos_ponentes = PonenteSerializer(many=True)
     class Meta:
         model = Ponencia
-        fields =['id', 'name', 'ponentes', 'description', 'time', 'place']
+        fields =['id', 'name', 'ponentes', 'description', 'time', 'place','categoria']
         # extra_kwargs = {
         #     'ponente': {'lookup_field': 'id'}
         # }
