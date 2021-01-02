@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from programa.models import Ponencia
 #Descomentar cuando este importado el custom user
 #from registro.models import User
@@ -8,7 +9,7 @@ from registro.models import User
 
 class Asistencia(models.Model):
     asiste = models.BooleanField(default=False, null=False)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ponencia = models.ForeignKey(Ponencia, on_delete=models.CASCADE)
 
     class Meta:
