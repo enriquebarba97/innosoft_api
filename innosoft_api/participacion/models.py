@@ -4,8 +4,12 @@ from programa.models import Ponencia
 #from registro.models import User
 
 #Eliminar cuando este importado el custom user
+
 from django.contrib.auth.models import User
+#User from develop
+#from registro.models import User
 from .cryptography import encrypt
+
 
 class Asistencia(models.Model):
     asiste = models.BooleanField(default=False, null=False)
