@@ -10,7 +10,7 @@ class User(AbstractUser):
     ordering = ['id']
   username = models.CharField(max_length = 50, blank = True, null = True, unique = True) 
   uvus = models.CharField(unique=True, max_length=25)
-  email = models.EmailField(_('email address'), blank = True) 
+  email = models.EmailField(_('email address'), blank = True)
   USERNAME_FIELD = 'uvus'
   REQUIRED_FIELDS = ['username', 'first_name','last_name','email','groups'] 
   def __str__(self): 
