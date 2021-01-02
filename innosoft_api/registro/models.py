@@ -8,7 +8,6 @@ from datetime import date
 class User(AbstractUser):
   class Meta:
     ordering = ['id']
-    db_table = 'registro_user'
   username = models.CharField(max_length = 50, blank = True, null = True, unique = True) 
   uvus = models.CharField(unique=True, max_length=25)
   email = models.EmailField(_('email address'), blank = True)
