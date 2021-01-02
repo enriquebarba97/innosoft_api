@@ -116,9 +116,7 @@ class RegistroTests(BaseTestCase):
     "first_name": "Enrique",
     "last_name": "Barba",
     "password": "qwerty",
-    "groups": [
-        1
-    ]
+    "groups": [1]
 }
         response = self.client.post(url, data)
         
@@ -172,8 +170,7 @@ class RegistroTests(BaseTestCase):
     "email": "moderador32@mod.es",
     "first_name": "modsurn4",
     "last_name": "prueba3",
-    "groups": [  
-    ]
+    "groups": []
 }
         response = self.client.put(url, data)
         
