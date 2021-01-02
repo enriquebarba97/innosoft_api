@@ -1,13 +1,6 @@
 from django.db import models
 from programa.models import Ponencia
-#Descomentar cuando este importado el custom user
-#from registro.models import User
-
-#Eliminar cuando este importado el custom user
-
-from django.contrib.auth.models import User
-#User from develop
-#from registro.models import User
+from registro.models import User
 from .cryptography import encrypt
 
 
