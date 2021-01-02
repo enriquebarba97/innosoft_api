@@ -32,7 +32,7 @@ class Asistencia(models.Model):
 
         self.code = coded_bytes
 
-        super().save(self, force_insert, force_update, using, update_fields)
+        super().save(force_insert, force_update, using, update_fields)
 
 
 def toString(self):

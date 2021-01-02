@@ -3,3 +3,5 @@ djangorestframework==3.12.2
 django-phone-field==1.8.1
 coverage==5.3
 pycryptodome==3.9.9
+qrcode==6.1
+Pillow==8.0.1
