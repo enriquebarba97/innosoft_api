@@ -16,6 +16,7 @@ class PonenteTests(BaseTestCase):
         """
         Ponente.objects.create(name="Ponente Base 1", surname="Surname Base 1", phone="123547896", email="base1@gmail.com")
         Ponente.objects.create(name="Ponente Base 2", surname="Surname Base 2", phone="854125478", email="base2@gmail.com")
+        super().setUp()
 
 
     #------------------------------------------------------------------------------------------------------ READ
@@ -40,7 +41,7 @@ class PonenteTests(BaseTestCase):
             """
             Aseguramos que se puede obtener un ponente por su id siendo participante
             """
-            BaseTestCase.get_token(self, uvus = "participante")
+            self.get_token()
 
             url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"1"})
             response = self.client.get(url)
@@ -54,7 +55,7 @@ class PonenteTests(BaseTestCase):
             self.assertEqual(response.data["phone"], ponente.phone)
             self.assertEqual(response.data["email"], ponente.email)
 
-            BaseTestCase.remove_token(uvus="participante")
+            self.remove_token()
 
 
     def test_obtener_ponentes_sin_permisos(self):
@@ -88,7 +89,7 @@ class PonenteTests(BaseTestCase):
         """
         Aseguramos que se pueden obtener todos los ponentes siendo participante
         """
-        BaseTestCase.get_token(self, uvus = "participante")
+        self.get_token(uvus = "participante")
 
         url = reverse("ponentes_view")
         response = self.client.get(url)
@@ -113,7 +114,7 @@ class PonenteTests(BaseTestCase):
         self.assertEqual(second_result["phone"], second_ponente.phone)
         self.assertEqual(second_result["email"], second_ponente.email)
                
-        BaseTestCase.remove_token(uvus="participante")
+        self.remove_token()
 
     #------------------------------------------------------------------------------------------------------ CREATE
 
@@ -142,9 +143,9 @@ class PonenteTests(BaseTestCase):
         """
         Aseguramos que un admin puede crear una entidad Ponente.
         """
-        BaseTestCase.get_token(self, uvus = "admin")
+        self.get_token()
 
-        url = reverse("ponentes_view")
+        url = reverse("create_ponentes_view")
 
         test_name = "Ponente Test 1"
         test_surname = "Surname 1"
@@ -161,7 +162,7 @@ class PonenteTests(BaseTestCase):
         self.assertEqual(Ponente.objects.get(pk=3).phone, test_phone)
         self.assertEqual(Ponente.objects.get(pk=3).email, test_email)
 
-        BaseTestCase.remove_token(uvus="admin")
+        self.remove_token()
 
     #------------------------------------------------------------------------------------------------------ DELETE
 
@@ -179,14 +180,14 @@ class PonenteTests(BaseTestCase):
         """
         Aseguramos que un admin puede borrar un ponente
         """
-        BaseTestCase.get_token(self, uvus = "admin")
+        self.get_token()
 
         url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"1"})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Ponente.objects.filter(id="1").count(), 0)
 
-        BaseTestCase.remove_token(uvus="admin")
+        self.remove_token()
 
     #------------------------------------------------------------------------------------------------------ UPDATE
 
@@ -208,10 +209,7 @@ class PonenteTests(BaseTestCase):
         """
         Aseguramos que un admin puede actualizar un ponente
         """
-        BaseTestCase.get_token(BaseTestCase)
-
-        #third_ponente = Ponente.objects.get(pk=2)
-        #self.assertEqual(third_ponente.name, "Ponente Base 2")
+        self.get_token()
 
         url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"2"})
         data = {"name":"Updated Name 2"}
@@ -223,4 +221,4 @@ class PonenteTests(BaseTestCase):
 
         self.assertEqual(second_ponente.name, "Updated Name 2")
 
-        BaseTestCase.remove_token(self)
+        self.remove_token()
