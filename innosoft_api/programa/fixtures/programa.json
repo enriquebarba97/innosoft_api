@@ -1,0 +1,7 @@
+[{"model": "programa.ponente", "pk": 1, "fields": {"name": "Miguel Angel Pantoja", "surname": "", "phone": null, "email": "patata"}},
+     {"model": "programa.ponente", "pk": 2, "fields": {"name": "Enrique Barba", "surname": "", "phone": null, "email": "patata"}}, 
+     {"model": "programa.ponente", "pk": 3, "fields": {"name": "Carlos Oliveira", "surname": "", "phone": null, "email": "patata@patatal.com"}},
+      {"model": "programa.ponente", "pk": 4, "fields": {"name": "Carlos Oliveira", "surname": "", "phone": null, "email": "patata@patatal.com"}}, 
+      {"model": "programa.ponente", "pk": 5, "fields": {"name": "Nueva", "surname": "Persona", "phone": null, "email": "persona@personal.com"}}, 
+      {"model": "programa.ponencia", "pk": 3, "fields": {"name": "Juanjo da asco", "description": "Pues eso", "time": "2020-11-30T08:00:00Z", "place": "Mi casa", "ponentes": [2]}},
+       {"model": "programa.ponencia", "pk": 4, "fields": {"name": "Juanjo da asco", "description": "Pues eso", "time": "2020-11-30T08:00:00Z", "place": "Mi casa", "ponentes": [1, 3]}}]

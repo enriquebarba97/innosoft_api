@@ -13,11 +13,18 @@ class Ponente(models.Model):
         return self.name
 
 class Ponencia(models.Model):
+    CATEGORIAS = (
+        ('IA', 'Inteligencia articial'),
+        ('ODOO', 'Odoo'),
+        ('PRG', 'Programacion'),
+        ('OTH', 'Otras'),
+        )
     name = models.CharField(max_length=80)
     ponentes = models.ManyToManyField(Ponente, related_name='datos_ponentes')
     description = models.CharField(max_length=2000)
     time = models.DateTimeField()
     place = models.CharField(max_length=20)
+    categoria = models.CharField(max_length=35, choices=CATEGORIAS, default='Otras')
 
     def __str__(self):
         return self.name
