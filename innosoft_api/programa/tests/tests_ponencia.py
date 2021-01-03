@@ -134,7 +134,7 @@ class PonenciaTests(APITestCase):
         self.assertEqual(Ponencia.objects.filter(id="1").count(), 0)
 
     
-    def test_actualizar_ponencia_sin_permisos(self):
+    def test_actualizar_ponencia(self):
         """
         Aseguramos que se puede actualizar una ponencia
         """
@@ -143,25 +143,10 @@ class PonenciaTests(APITestCase):
         updated_name = "Updated Ponencia Name 2"
 
         data = {"name":updated_name}
-        response = self.client.post(url, data, format="json")
+        response = self.client.put(url, data, format="json")
         
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
         ponencia = Ponencia.objects.get(pk=2)
 
         self.assertEqual(ponencia.name, "Ponencia Base 2")
-
-
-    def test_actualizar_ponencia_con_permisos(self):
-        """
-        Aseguramos que se puede actualizar una ponencia
-        """
-        #TODO
-        url = reverse("ponencia_retrieve_update_delete", kwargs={"pk":"2"})
-
-        updated_name = "Updated Ponencia Name 2"
-
-        data = {"name":updated_name}
-        response = self.client.post(url, data, format="json")
-        
-        #self.assertEqual(response.status_code, status.HTTP_200_OK)
