@@ -6,26 +6,16 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from programa.models import Ponencia, Ponente
+from registro.tests import BaseTestCase
 import datetime
 
-class PonenciaTests(APITestCase):
+class PonenciaTests(BaseTestCase):
 
-    def setUp(self):
+    #------------------------------------------------------------------------------------------------------READ
+
+    def test_obtener_ponencias_sin_permisos(self):
         """
-        Preparamos la base de datos con un par de Ponencias de prueba.
-        """
-        Ponente.objects.create(name="Ponente Base 1", surname="Surname Base 1", phone="123547896", email="base1@gmail.com")
-        Ponente.objects.create(name="Ponente Base 2", surname="Surname Base 2", phone="854125478", email="base2@gmail.com")
-
-        Ponencia.objects.create(name="Ponencia Base 1", description="Descripción Base 1", time=datetime.datetime.now()+datetime.timedelta(hours=5), place="Sitio Base 1")
-        Ponencia.objects.get(pk=1).ponentes.set([Ponente.objects.get(pk=1), Ponente.objects.get(pk=2)])
-
-        Ponencia.objects.create(name="Ponencia Base 2", description="Descripción Base 2", time=datetime.datetime.now()+datetime.timedelta(hours=5), place="Sitio Base 2")
-        Ponencia.objects.get(pk=2).ponentes.set([Ponente.objects.get(pk=2)])
-
-    def test_obtener_ponencias(self):
-        """
-        Aseguramos que se pueden obtener todas las ponencias
+        Aseguramos que no se puedan obtener todas las ponencias
         """
         url = reverse("ponencia_view")
         response = self.client.get(url)
@@ -72,8 +62,7 @@ class PonenciaTests(APITestCase):
         self.assertEqual(second_result["ponentes"][0]["id"], 2)
         self.assertEqual(second_result["ponentes"][0]["name"], Ponente.objects.get(pk=2).name)
 
-
-    def test_obtener_ponencia_por_id(self):
+    def test_obtener_ponencia_por_id_sin_permisos(self):
         """
         Aseguramos que se puede obtener una ponencia por su id
         """
@@ -94,8 +83,30 @@ class PonenciaTests(APITestCase):
         self.assertEqual(response.data["ponentes"][0]["id"], 2)
         self.assertEqual(response.data["ponentes"][0]["name"], Ponente.objects.get(pk=2).name)
 
+    def test_obtener_ponencia_por_id_con_permisos(self):
+        """
+        Aseguramos que se puede obtener una ponencia por su id
+        """
+        url = reverse("ponencia_retrieve_update_delete", kwargs={"pk":"2"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_crear_ponencia(self):
+        ponencia = Ponencia.objects.get(pk=2)
+
+        self.assertEqual(response.data["id"], ponencia.id)
+        self.assertEqual(response.data["name"], ponencia.name)
+        self.assertEqual(response.data["description"], ponencia.description)
+        self.assertEqual(response.data["time"], ponencia.time.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
+        self.assertEqual(response.data["place"], ponencia.place)
+
+        self.assertEqual(len(response.data["ponentes"]), 1)
+
+        self.assertEqual(response.data["ponentes"][0]["id"], 2)
+        self.assertEqual(response.data["ponentes"][0]["name"], Ponente.objects.get(pk=2).name)
+
+    #------------------------------------------------------------------------------------------------------ CREATE   
+
+    def test_crear_ponencia_sin_permisos(self):
         """
         Aseguramos que se puede crear una entidad Ponencia.
         """
@@ -123,8 +134,44 @@ class PonenciaTests(APITestCase):
         self.assertEqual(Ponencia.objects.get(pk=3).ponentes.first(), Ponente.objects.get(pk=1))
         self.assertEqual(Ponencia.objects.get(pk=3).ponentes.last(), Ponente.objects.get(pk=2))
 
-        
-    def test_borrar_ponencia(self):
+
+
+    def test_crear_ponencia_con_permisos(self):
+        """
+        Aseguramos que se puede crear una entidad Ponencia.
+        """
+        BaseTestCase.get_token(uvus = "admin")
+
+        url = reverse("create_ponencia_view")
+
+        test_name = "Ponencia Test 1"
+        test_description = "Descripcion Test 1"
+        test_place = "Place Test 1"
+        test_time = "2050-12-29T12:50"
+        test_ponentes = ["1", "2"]
+
+        data = {"name": test_name, "description":test_description, "place":test_place, "time":test_time, "ponentes":test_ponentes}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(Ponencia.objects.filter(name=test_name).count(), 1)
+        self.assertEqual(Ponencia.objects.filter(name=test_name).get().id, 3)
+        self.assertEqual(Ponencia.objects.get(pk=3).name, test_name)
+        self.assertEqual(Ponencia.objects.get(pk=3).description, test_description)
+        self.assertEqual(Ponencia.objects.get(pk=3).place, test_place)
+        self.assertEqual(Ponencia.objects.get(pk=3).time.strftime("%Y-%m-%dT%H:%M"), test_time)
+
+        self.assertEqual(Ponencia.objects.get(pk=3).ponentes.count(), 2)
+
+        self.assertEqual(Ponencia.objects.get(pk=3).ponentes.first(), Ponente.objects.get(pk=1))
+        self.assertEqual(Ponencia.objects.get(pk=3).ponentes.last(), Ponente.objects.get(pk=2))
+
+        BaseTestCase.remove_token(uvus="admin")
+
+
+    #------------------------------------------------------------------------------------------------------ DELETE
+
+    def test_borrar_ponencia_sin_permisos(self):
         """
         Aseguramos que se puede borrar una Ponencia
         """
@@ -133,8 +180,35 @@ class PonenciaTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Ponencia.objects.filter(id="1").count(), 0)
 
-    
-    def test_actualizar_ponencia(self):
+    def test_borrar_ponencia_con_permisos(self):
+        """
+        Aseguramos que se puede borrar una Ponencia
+        """
+        url = reverse("ponencia_retrieve_update_delete", kwargs={"pk":"1"})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Ponencia.objects.filter(id="1").count(), 0)
+
+    #------------------------------------------------------------------------------------------------------ UPDATE
+
+    def test_actualizar_ponencia_sin_permisos(self):
+        """
+        Aseguramos que se puede actualizar una ponencia
+        """
+        url = reverse("ponencia_retrieve_update_delete", kwargs={"pk":"2"})
+
+        updated_name = "Updated Ponencia Name 2"
+
+        data = {"name":updated_name}
+        response = self.client.put(url, data, format="json")
+        
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        ponencia = Ponencia.objects.get(pk=2)
+
+        self.assertEqual(ponencia.name, "Ponencia Base 2")
+
+    def test_actualizar_ponencia_con_permisos(self):
         """
         Aseguramos que se puede actualizar una ponencia
         """
