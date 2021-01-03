@@ -82,36 +82,19 @@ class PonenteTests(APITestCase):
         self.assertEqual(second_result["phone"], second_ponente.phone)
         self.assertEqual(second_result["email"], second_ponente.email)
 
-    def test_actualizar_ponente_sin_permisos(self):
+    def test_actualizar_ponente(self):
         """
         Aseguramos que se puede actualizar un ponente
         """
         url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"2"})
         data = {"name":"Updated Name 2"}
-        response = self.client.post(url, data, format="json")
+        response = self.client.put(url, data, format="json")
         
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         second_ponente = Ponente.objects.get(pk=2)
 
-        self.assertEqual(second_ponente.name, "Ponente Base 2")
-
-    def test_actualizar_ponente_con_permisos(self):
-        """
-        Aseguramos que se puede actualizar un ponente
-        """
-        url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"2"})
-        data = {"name":"Updated Name 2"}
-        response = self.client.post(url, data, format="json")
-        
-        #TODO
-
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # second_ponente = Ponente.objects.get(pk=2)
-
-        # self.assertEqual(second_ponente.name, "Updated Name 2")
-        
+        self.assertEqual(second_ponente.name, "Updated Name 2")
 
     def test_borrar_ponente(self):
         """
