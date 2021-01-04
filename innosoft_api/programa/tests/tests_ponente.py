@@ -23,23 +23,15 @@ class PonenteTests(BaseTestCase):
 
     def test_obtener_ponente_por_id_sin_permisos(self):
             """
-            Aseguramos que se puede obtener un ponente por su id
+            Aseguramos que no se puede obtener un ponente por su id sin permisos
             """
             url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"1"})
             response = self.client.get(url)
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-            ponente = Ponente.objects.get(pk=1)
-
-            self.assertEqual(response.data["id"], ponente.id)
-            self.assertEqual(response.data["name"], ponente.name)
-            self.assertEqual(response.data["surname"], ponente.surname)
-            self.assertEqual(response.data["phone"], ponente.phone)
-            self.assertEqual(response.data["email"], ponente.email)
+            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_obtener_ponente_por_id_con_permisos(self):
             """
-            Aseguramos que se puede obtener un ponente por su id siendo participante
+            Aseguramos que un admin puede obtener un ponente por su id
             """
             self.get_token()
 
@@ -60,7 +52,7 @@ class PonenteTests(BaseTestCase):
 
     def test_obtener_ponentes_sin_permisos(self):
         """
-        Aseguramos que se pueden obtener todos los ponentes
+        Aseguramos que los usuarios anonimos pueden obtener todos los ponentes
         """
         url = reverse("ponentes_view")
         response = self.client.get(url)
@@ -87,7 +79,7 @@ class PonenteTests(BaseTestCase):
 
     def test_obtener_ponentes_con_permisos(self):
         """
-        Aseguramos que se pueden obtener todos los ponentes siendo participante
+        Aseguramos que los usuarios logeados pueden obtener todos los ponentes
         """
         self.get_token(uvus = "participante")
 
@@ -120,9 +112,9 @@ class PonenteTests(BaseTestCase):
 
     def test_crear_ponente_sin_permisos(self):
         """
-        Aseguramos que se puede crear una entidad Ponente.
+        Aseguramos que no se puede crear una entidad Ponente sin permisos.
         """
-        url = reverse("ponentes_view")
+        url = reverse("create_ponentes_view")
 
         test_name = "Ponente Test 1"
         test_surname = "Surname 1"
@@ -131,13 +123,8 @@ class PonenteTests(BaseTestCase):
 
         data = {"name":test_name, "surname":test_surname, "phone":test_phone, "email":test_email}
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Ponente.objects.filter(name=test_name).count(), 1)
-        self.assertEqual(Ponente.objects.filter(name=test_name).get().id, 3)
-        self.assertEqual(Ponente.objects.get(pk=3).name, test_name)
-        self.assertEqual(Ponente.objects.get(pk=3).surname, test_surname)
-        self.assertEqual(Ponente.objects.get(pk=3).phone, test_phone)
-        self.assertEqual(Ponente.objects.get(pk=3).email, test_email)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(Ponente.objects.filter(name=test_name).count(), 0)
 
     def test_crear_ponente_con_permisos(self):
         """
@@ -168,12 +155,12 @@ class PonenteTests(BaseTestCase):
 
     def test_borrar_ponente_sin_permisos(self):
         """
-        Aseguramos que se puede borrar un ponente
+        Aseguramos que no se puede borrar un ponente sin permisos
         """
         url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"1"})
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Ponente.objects.filter(id="1").count(), 0)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(Ponente.objects.filter(id="1").count(), 1)
         
 
     def test_borrar_ponente_con_permisos(self):
@@ -193,17 +180,17 @@ class PonenteTests(BaseTestCase):
 
     def test_actualizar_ponente_sin_permisos(self):
         """
-        Aseguramos que se puede actualizar un ponente
+        Aseguramos que no se puede actualizar un ponente sin permisos
         """
         url = reverse("ponente_retrieve_update_delete", kwargs={"pk":"2"})
         data = {"name":"Updated Name 2"}
         response = self.client.put(url, data, format="json")
         
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         second_ponente = Ponente.objects.get(pk=2)
 
-        self.assertEqual(second_ponente.name, "Updated Name 2")
+        self.assertEqual(second_ponente.name, "Ponente Base 2")
 
     def test_actualizar_ponente_con_permisos(self):
         """
