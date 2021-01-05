@@ -1,4 +1,5 @@
 from rest_framework import serializers 
+from rest_framework.serializers import Serializer, FileField
 from registro.models import User 
 from django.contrib.auth.models import Group
 
@@ -44,3 +45,8 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 		self.fields['groups'] =  GroupSerializer(many=True)
 		return super(UpdateUserSerializer, self).to_representation(instance)
 
+class UploadSerializer(serializers.ModelSerializer):
+	file_uploaded = FileField()
+	class Meta:
+		model = User
+		fields = ('file_uploaded',)
