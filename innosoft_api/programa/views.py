@@ -66,6 +66,9 @@ class PonenciaRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
   queryset = Ponencia.objects.all()
   serializer_class = PonenciaSerializer
 
+  def put(self, request, *args, **kwargs):
+    return self.partial_update(request, *args, **kwargs)
+
 # def getPonenteById(request, param):
 #   data = Ponente.objects.filter(id=param)
 #   return JsonResponse(list(data.values("id","name","age")),safe=False)

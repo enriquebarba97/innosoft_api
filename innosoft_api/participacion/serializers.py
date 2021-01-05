@@ -3,7 +3,6 @@ from .models import Asistencia
 
 class AsistenciaSerializer(serializers.ModelSerializer):
     class Meta:
-        """docstring"""
         model = Asistencia
         fields = ['asiste', 'usuario', 'ponencia', 'id']
 

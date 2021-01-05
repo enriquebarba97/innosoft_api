@@ -165,31 +165,28 @@ class RegistroTests(BaseTestCase):
         self.get_token()
         url = reverse('update_delete_users', args=[3])
         data = {
-    "id": "3",
     "uvus": "antferman2",
-    "email": "moderador32@mod.es",
-    "first_name": "modsurn4",
     "last_name": "prueba3",
-    "groups": []
+    "groups": [
+        1
+    ]
 }
         response = self.client.put(url, data)
         
         self.assertEqual(response.status_code, 200)
+
         self.assertEqual(User.objects.get(uvus="antferman2").last_name,"prueba3")
+        self.assertTrue(User.objects.get(pk=3).groups.filter(name="administrador").exists())
         self.remove_token()
+
     def test_update_alumno_sinpermiso(self):
         """
         Test para comprobar que no se puede actualizar un usuario siendo un participante
         """
         url = reverse('update_delete_users', args=[3])
         data = {
-    "id": "3",
     "uvus": "antferman2",
-    "email": "moderador32@mod.es",
-    "first_name": "modsurn4",
-    "last_name": "prueba3",
-    "groups": [  
-    ]
+    "last_name": "prueba3"
 }
         self.get_token(uvus="participante")
         response = self.client.put(url, data)

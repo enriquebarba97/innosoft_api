@@ -12,11 +12,10 @@ class Asistencia(models.Model):
     code = models.TextField(blank=True, unique=True)
 
     class Meta:
-        """docstring"""
         unique_together = ["ponencia", "usuario"]
+        ordering = ['id']
 
     def __str__(self):
-        """docstring"""
         return str(self.usuario) + toString(self.asiste) + " a " + str(self.ponencia)
 
     def save(self, force_insert=False, force_update=False, using=None,

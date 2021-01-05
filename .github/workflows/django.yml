@@ -24,10 +24,4 @@ jobs:
     - name: Ejecutar Tests
       run: |
         cd innosoft_api/
-        coverage run --source=. ./manage.py test
-        coverage xml
-    - name: Enviar datos de cobertura a Codacy
-      run: python-codacy-coverage -r innosoft_api/coverage.xml
-      env:
-        CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
-      
+        coverage run --source=. ./manage.py test      
