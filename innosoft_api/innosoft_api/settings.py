@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'programa',
     'registro',
     'participacion',
-    'drf_yasg'
+    'drf_yasg',
+    'phone_field'
 ]
 
 SWAGGER_SETTINGS = {
