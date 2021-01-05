@@ -19,3 +19,5 @@ class UpdateDeleteUserView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [AdminPass]
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
