@@ -1,4 +1,4 @@
-name: Django Tests
+name: TravisCI Tests
 on:
   push:
     branches: [ develop ]
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Ejecutar pruebas Django
+    name: Ejecutar pruebas TravisCI
     runs-on: ubuntu-latest
 
     steps:
@@ -24,4 +24,10 @@ jobs:
     - name: Ejecutar Tests
       run: |
         cd innosoft_api/
-        coverage run --source=. ./manage.py test      
+        coverage run --source=. ./manage.py test
+        coverage xml
+    - name: Enviar datos de cobertura a Codacy
+      run: python-codacy-coverage -r innosoft_api/coverage.xml
+      env:
+        CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
+      
