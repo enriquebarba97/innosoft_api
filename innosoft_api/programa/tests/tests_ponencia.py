@@ -261,13 +261,17 @@ class PonenciaTests(BaseTestCase):
         Aseguramos que un admin puede actualizar una ponencia
         """
         self.get_token()
+        test_description = "Descripcion Test 1"
+        test_place = "Place Test 1"
+        test_time = "2050-12-29T12:50"
+        test_ponentes = ["1", "2"]
 
         url = reverse("ponencia_retrieve_update_delete", kwargs={"pk":"2"})
-        data = {"name":"Updated Name 2"}
+        data = {"name": "Updated Name 2", "description":test_description, "place":test_place, "time":test_time, "ponentes":test_ponentes}
         response = self.client.put(url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+    
         ponencia = Ponencia.objects.get(pk=2)
 
         self.assertEqual(ponencia.name, "Updated Name 2")
