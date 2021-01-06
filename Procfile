@@ -1,1 +1,1 @@
-web: gunicorn innosoft_api.innosoft_api.wsgi
+web: sh -c 'cd innosoft_api && gunicorn innosoft_api.wsgi --log-file -'
