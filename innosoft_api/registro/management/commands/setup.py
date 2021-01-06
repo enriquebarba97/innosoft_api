@@ -1,18 +1,20 @@
 import os
 from django.core.management.base import BaseCommand
 
+from django.core.management import call_command
+
 #Sets up the system
 
 class Command(BaseCommand):
     help = 'Sets up the system'
 
     def handle(self, *args, **kwargs):
-        os.system("python .\innosoft_api\manage.py makemigrations registro")
-        os.system("python .\innosoft_api\manage.py migrate registro")
-        os.system("python .\innosoft_api\manage.py group")
-        os.system("python .\innosoft_api\manage.py migrate")
-        os.system("python .\innosoft_api\manage.py makemigrations programa")
-        os.system("python .\innosoft_api\manage.py migrate programa")
-        os.system("python .\innosoft_api\manage.py makemigrations participacion")
-        os.system("python .\innosoft_api\manage.py migrate participacion")
-        os.system("python .\innosoft_api\manage.py createAdmin")
+        call_command("makemigrations", "registro")
+        call_command("migrate","registro")
+        call_command("group")
+        call_command("migrate")
+        call_command("makemigrations", "programa")
+        call_command("migrate", "programa")
+        call_command("makemigrations", "participacion")
+        call_command("migrate", "participacion")
+        call_command("createAdmin")

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = '!icbr#eln*pb8^z5o1%wfbhx@y6hi)kq98-%#r_61$fkl&uj!3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 
 # Application definition
@@ -150,3 +151,10 @@ REST_FRAMEWORK = {
       'rest_framework.authentication.BasicAuthentication', 
   ), 
 }
+
+
+if 'I_AM_HEROKU' in os.environ:
+    # Configure Django App for Heroku.
+    import django_heroku
+    # Activate Django-Heroku.
+    django_heroku.settings(locals())
