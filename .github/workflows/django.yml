@@ -25,7 +25,7 @@ jobs:
       run: |
         cd innosoft_api/
         coverage run --source=. ./manage.py test
-	      coverage xml
+        coverage xml
     - name: Enviar datos de cobertura a Codacy
       run: python-codacy-coverage -r innosoft_api/coverage.xml
       env:
