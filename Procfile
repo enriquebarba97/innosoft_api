@@ -1,1 +1,1 @@
-web: gunicorn innosoft_api.wsgi
+web: gunicorn innosoft_api.innosoft_api.wsgi
