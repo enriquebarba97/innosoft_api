@@ -38,7 +38,7 @@ class AsistenciaTests(BaseTestCase):
         Asistencia.objects.create(usuario=User.objects.get(pk=2), ponencia=Ponencia.objects.get(pk=3))
         Asistencia.objects.create(usuario=User.objects.get(pk=1), ponencia=Ponencia.objects.get(pk=3))
 
-    def test_crear_asistencia_con_permisos(self):
+    def test_crear_asistencia_con_permisos_validos(self):
         BaseTestCase.get_token(self, uvus="participante")
         url = reverse("asistencias_create")
 
@@ -84,7 +84,7 @@ class AsistenciaTests(BaseTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_borrar_asistencia_con_permisos(self):
+    def test_borrar_asistencia_con_permisos_validos(self):
         url = reverse("asistencias_retrieve_destroy", kwargs={"pk":"1"})
         BaseTestCase.get_token(self, uvus="participante")
         response = self.client.delete(url)
@@ -100,9 +100,16 @@ class AsistenciaTests(BaseTestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_obtener_todas_asistencias_con_permisos(self):
+    def test_obtener_todas_asistencias_con_permisos_invalidos(self):
         url = reverse("asistencias_view")
         BaseTestCase.get_token(self, uvus="participante")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        BaseTestCase.remove_token(self)
+
+    def test_obtener_todas_asistencias_con_permisos_validos(self):
+        url = reverse("asistencias_view")
+        BaseTestCase.get_token(self, uvus="staff")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictContainsSubset({"count":3}, response.data)
@@ -138,9 +145,16 @@ class AsistenciaTests(BaseTestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_obtener_asistencias_usuario_con_permisos(self):
+    def test_obtener_asistencias_usuario_con_permisos_invalidos(self):
         url = reverse("asistencias_por_usuario", kwargs={"int":"2"})
         BaseTestCase.get_token(self, uvus="participante")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        BaseTestCase.remove_token(self)
+        
+    def test_obtener_asistencias_usuario_con_permisos_validos(self):
+        url = reverse("asistencias_por_usuario", kwargs={"int":"2"})
+        BaseTestCase.get_token(self, uvus="staff")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictContainsSubset({"count":2}, response.data)
@@ -168,9 +182,16 @@ class AsistenciaTests(BaseTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_obtener_asistencias_ponencia_con_permisos(self):
+    def test_obtener_asistencias_ponencia_con_permisos_invalidos(self):
         url = reverse("asistencias_por_ponencia", kwargs={"int":"3"})
         BaseTestCase.get_token(self, uvus="participante")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        BaseTestCase.remove_token(self)
+
+    def test_obtener_asistencias_ponencia_con_permisos_validos(self):
+        url = reverse("asistencias_por_ponencia", kwargs={"int":"3"})
+        BaseTestCase.get_token(self, uvus="staff")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictContainsSubset({"count":2}, response.data)
@@ -213,14 +234,23 @@ class AsistenciaTests(BaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         BaseTestCase.remove_token(self)
 
-    def test_get_asistencias_ponencia_sin_permisos(self):
+    def test_get_qr_asistencia_sin_permisos(self):
         url = reverse("qr_de_asistencia", kwargs={"pk":"1"})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_check_qr_con_permisos(self):
+    def test_check_qr_con_permisos_invalidos(self):
         url = reverse("asistencias_qr_check")
         BaseTestCase.get_token(self, uvus="participante")
+        Asistencia.objects.get(pk=1).asiste = False
+        data = {"code":Asistencia.objects.get(pk=1).code}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        BaseTestCase.remove_token(self)
+
+    def test_check_qr_con_permisos_validos(self):
+        url = reverse("asistencias_qr_check")
+        BaseTestCase.get_token(self, uvus="staff")
         Asistencia.objects.get(pk=1).asiste = False
         data = {"code":Asistencia.objects.get(pk=1).code}
         response = self.client.post(url, data, format='json')
@@ -228,9 +258,9 @@ class AsistenciaTests(BaseTestCase):
         self.assertEqual(Asistencia.objects.get(pk=1).asiste, True)
         BaseTestCase.remove_token(self)
 
-    def test_check_qr_asiste_true_con_permisos(self):
+    def test_check_qr_asiste_true_con_permisos_validos(self):
         url = reverse("asistencias_qr_check")
-        BaseTestCase.get_token(self, uvus="participante")
+        BaseTestCase.get_token(self, uvus="staff")
         Asistencia.objects.get(pk=1).asiste = True
         data = {"code":Asistencia.objects.get(pk=1).code}
         response = self.client.post(url, data, format='json')
@@ -238,9 +268,9 @@ class AsistenciaTests(BaseTestCase):
         self.assertEqual(Asistencia.objects.get(pk=1).asiste, True)
         BaseTestCase.remove_token(self)
 
-    def test_check_qr_sin_code_con_permisos(self):
+    def test_check_qr_sin_code_con_permisos_validos(self):
         url = reverse("asistencias_qr_check")
-        BaseTestCase.get_token(self, uvus="participante")
+        BaseTestCase.get_token(self, uvus="staff")
         data = {}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
