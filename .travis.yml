@@ -6,10 +6,15 @@ python:
 install:
   - python -m pip install --upgrade pip
   - pip install -r requirements.txt
-  - pip install codacy-coverage
 script:
-  - python .\innosoft_api\registro\management\commands\setup.py 
   - cd innosoft_api/
-  - coverage run --source=. ./manage.py test
-  - coverage xml
-  - python-codacy-coverage -r innosoft_api/coverage.xml
+  - python manage.py makemigrations registro
+  - python manage.py migrate registro
+  - python manage.py group
+  - python manage.py migrate
+  - python manage.py makemigrations programa
+  - python manage.py migrate programa
+  - python manage.py makemigrations participacion
+  - python manage.py migrate participacion
+  - python manage.py test
+
