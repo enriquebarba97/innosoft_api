@@ -150,3 +150,6 @@ REST_FRAMEWORK = {
       'rest_framework.authentication.BasicAuthentication', 
   ), 
 }
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
