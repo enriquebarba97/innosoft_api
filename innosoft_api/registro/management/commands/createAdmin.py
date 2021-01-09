@@ -10,7 +10,8 @@ class Command(BaseCommand):
     #uvus: admin  pass: admin
 
     def handle(self, *args, **kwargs):
-        try:
+
+        if (not User.objects.filter(uvus="admin").exists()):
             user= User.objects.create(uvus="admin",email="", first_name="admin",last_name="admin")
             user.set_password("admin")
             user.is_staff = True
@@ -18,8 +19,7 @@ class Command(BaseCommand):
             user.save()
             group = Group.objects.get(id=1)
             user.groups.add(group)
-        except IntegrityError as e:
-            print("Admin was already created")
+
         
 
             
