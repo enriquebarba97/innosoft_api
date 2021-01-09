@@ -14,8 +14,12 @@ class Command(BaseCommand):
         user.set_password("admin")
         user.is_staff = True
         user.is_superuser = True
-        user.save()
-        group = Group.objects.get(id=1)
-        user.groups.add(group)
+        try:
+            user.save()
+            group = Group.objects.get(id=1)
+            user.groups.add(group)
+        except IntegrityError:
+            print("Admin was already created")
+        
 
             
