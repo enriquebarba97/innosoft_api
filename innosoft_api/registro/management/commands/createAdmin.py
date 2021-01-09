@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from registro.models import User
 from django.contrib.auth.models import Group
+from django.db.utils import IntegrityError
 
 
 class Command(BaseCommand):
