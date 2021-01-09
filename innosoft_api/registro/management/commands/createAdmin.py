@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from registro.models import User
 from django.contrib.auth.models import Group
-from django.db.utils import IntegrityError
+from django.db import IntegrityError
 
 
 class Command(BaseCommand):
@@ -19,7 +19,7 @@ class Command(BaseCommand):
             user.save()
             group = Group.objects.get(id=1)
             user.groups.add(group)
-        except IntegrityError:
+        except IntegrityError as e:
             print("Admin was already created")
         
 
