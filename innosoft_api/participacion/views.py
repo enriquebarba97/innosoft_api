@@ -20,10 +20,12 @@ class AsistenciaCreateView(generics.CreateAPIView):
 
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaCreateSerializer
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
 
 class AsistenciaRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaSerializer
@@ -37,12 +39,12 @@ class AsistenciaView(generics.ListAPIView):
 
 class AsistenciaUsuarioView(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = AsistenciaSerializer
 
     def get_queryset(self):
-        usuario = self.kwargs["int"]
+        usuario = self.request.user
         return Asistencia.objects.filter( usuario = usuario)
 
 class AsistenciaPonenciaView(generics.ListAPIView):

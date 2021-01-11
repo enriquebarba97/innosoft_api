@@ -9,4 +9,4 @@ class AsistenciaSerializer(serializers.ModelSerializer):
 class AsistenciaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asistencia
-        fields = ['usuario', 'ponencia', 'id']
+        fields = ['ponencia']
