@@ -7,32 +7,49 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from .cryptography import decrypt
 from .qr_base64 import qr_in_base64
 import ast
-from .permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAdminUser, IsLoggedInUserOrAnonymous
 from rest_framework.authentication import TokenAuthentication
 
 
 # Create your views here.
 
 class AsistenciaCreateView(generics.CreateAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAuthenticated]
+
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaCreateSerializer
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
 
 class AsistenciaRetrieveDestroyView(generics.RetrieveDestroyAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAdminUser]
+
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaSerializer
 
 class AsistenciaView(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAdminUser]
+
     queryset = Asistencia.objects.all()
     serializer_class = AsistenciaSerializer
 
 class AsistenciaUsuarioView(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAuthenticated]
+
     serializer_class = AsistenciaSerializer
 
     def get_queryset(self):
-        usuario = self.kwargs["int"]
+        usuario = self.request.user
         return Asistencia.objects.filter( usuario = usuario)
 
 class AsistenciaPonenciaView(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAdminUser]
     serializer_class = AsistenciaSerializer
 
     def get_queryset(self):
@@ -41,8 +58,8 @@ class AsistenciaPonenciaView(generics.ListAPIView):
 
 
 @api_view(['POST'])
-#@authentication_classes([TokenAuthentication])
-#@permission_classes([IsAdminUser])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAdminUser])
 def asistencia_qr_check(request):
     if "code" in request.data:
         encrypted_code = request.data["code"]
@@ -77,8 +94,8 @@ def asistencia_qr_check(request):
         return Response("No se aportó ningun QR", status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-#@authentication_classes([TokenAuthentication])
-#@permission_classes([IsAdminUser])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def asistencia_qr(request, pk):
 
     try:
