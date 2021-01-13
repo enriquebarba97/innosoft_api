@@ -45,8 +45,5 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 		self.fields['groups'] =  GroupSerializer(many=True)
 		return super(UpdateUserSerializer, self).to_representation(instance)
 
-class UploadSerializer(serializers.ModelSerializer):
+class UploadSerializer(serializers.Serializer):
 	file_uploaded = FileField()
-	class Meta:
-		model = User
-		fields = ('file_uploaded',)
