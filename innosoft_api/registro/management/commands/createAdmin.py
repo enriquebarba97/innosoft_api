@@ -9,13 +9,16 @@ class Command(BaseCommand):
     #uvus: admin  pass: admin
 
     def handle(self, *args, **kwargs):
-        user= User.objects.create(uvus="admin",email="",
-        first_name="admin",last_name="admin")
-        user.set_password("admin")
-        user.is_staff = True
-        user.is_superuser = True
-        user.save()
-        group = Group.objects.get(id=1)
-        user.groups.add(group)
+
+        if (not User.objects.filter(uvus="admin").exists()):
+            user= User.objects.create(uvus="admin",email="", first_name="admin",last_name="admin")
+            user.set_password("admin")
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
+            group = Group.objects.get(id=1)
+            user.groups.add(group)
+
+        
 
             
