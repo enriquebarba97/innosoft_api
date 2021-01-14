@@ -9,12 +9,10 @@ Innosoft-api es un proyecto para la gestión y automatización del programa de l
 
 ## AUTORES
 
- - [Adrián García Barroso](https://github.com/adrgrabar)
- - [Carlos Cote Medina](https://github.com/Carcotmed)
- - [Miguel Ángel Pantoja Bas](https://github.com/miguelpantoja89)
- - [Moisés Pantión Loza](https://github.com/Moipanloz)
- - [Enrique Barba Roque](https://github.com/enriquebarba97)
- - [Manuel Sánchez Rodríguez](https://github.com/mansanrod4)
-
+- [Adrián García Barroso](https://github.com/adrgrabar)
+- [Carlos Cote Medina](https://github.com/Carcotmed)
+- [Miguel Ángel Pantoja Bas](https://github.com/miguelpantoja89)
+- [Moisés Pantión Loza](https://github.com/Moipanloz)
+- [Enrique Barba Roque](https://github.com/enriquebarba97)
+ 
 ## INSTALACIÓN
-
