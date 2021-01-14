@@ -59,7 +59,7 @@ def asistencia_qr_check(request):
   """
   Recibe el código que contiene el QR (b'...') y el id de la ponencia para validar la asistencia correspondiente
   """
-  if ("code" in request.data and "asistenciaId" in request.data):
+  if ("code" in request.data and "ponenciaId" in request.data):
       encrypted_code = request.data["code"]
       ponencia_id = request.data["ponenciaId"]
 
