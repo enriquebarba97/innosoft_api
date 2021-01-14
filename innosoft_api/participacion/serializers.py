@@ -9,4 +9,12 @@ class AsistenciaSerializer(serializers.ModelSerializer):
 class AsistenciaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asistencia
-        fields = ['ponencia']
+        fields = ['usuario', 'ponencia', 'id']
+
+class CodeSerializer (serializers.Serializer):
+    code = serializers.CharField(max_length=200)
+    ponenciaId = serializers.IntegerField()
+
+class QRSerializer (serializers.Serializer):
+    qr = serializers.CharField(max_length=200)
+

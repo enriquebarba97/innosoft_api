@@ -3,13 +3,16 @@ from participacion.serializers import *
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes, schema
 from .cryptography import decrypt
 from .qr_base64 import qr_in_base64
 import ast
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminUser, IsLoggedInUserOrAnonymous
 from rest_framework.authentication import TokenAuthentication
+
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 # Create your views here.
@@ -57,54 +60,83 @@ class AsistenciaPonenciaView(generics.ListAPIView):
         return Asistencia.objects.filter( ponencia = ponencia)
 
 
+@swagger_auto_schema(
+                      method='post',
+                      request_body=CodeSerializer,
+                      responses={
+                        200: "Se validó la asistencia correctamente",
+                        400: "Se encontró la asistencia, pero ya está validada | No se aportó ningun QR | El código no pertenece a esa asistencia",
+                        404: "No se encontró ninguna asistencia"
+                      }
+                    )
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAdminUser])
 def asistencia_qr_check(request):
-    if "code" in request.data:
-        encrypted_code = request.data["code"]
+  """
+  Recibe el código que contiene el QR (b'...') y el id de la ponencia para validar la asistencia correspondiente
+  """
+  if ("code" in request.data and "ponenciaId" in request.data):
+      encrypted_code = request.data["code"]
+      ponencia_id = request.data["ponenciaId"]
+
+      try:
+          instance =  Asistencia.objects.get(code=encrypted_code)
+
+          if (instance.ponencia.pk != ponencia_id):
+              return Response("El código no pertenece a esa ponencia", status=status.HTTP_400_BAD_REQUEST)
 
 
-        try:
-            instance =  Asistencia.objects.get(code=encrypted_code)
+          password = str(instance.usuario.id) + "" + str(instance.ponencia.id)
 
-            password = str(instance.usuario.id) + "" + str(instance.ponencia.id)
+          decoded_code_bytes = decrypt(ast.literal_eval(encrypted_code), password)
 
-            decoded_code_bytes = decrypt(ast.literal_eval(encrypted_code), password)
+          decoded_code = decoded_code_bytes.decode("utf-8")
 
-            decoded_code = decoded_code_bytes.decode("utf-8")
+          decoded_code = decoded_code.replace("X", "")
 
-            decoded_code = decoded_code.replace("X", "")
+          values = decoded_code.split(" ")
 
-            values = decoded_code.split(" ")
+          if (values[0] != "Usuario"+str(instance.usuario.id) or values[1] != "Ponencia"+str(instance.ponencia.id)):
+              return Response("Validation error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            if (values[0] != "Usuario"+str(instance.usuario.id) or values[1] != "Ponencia"+str(instance.ponencia.id)):
-                return Response("Validation error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+          if (instance.asiste == True):
+              return Response("Se encontró la asistencia, pero ya está validada", status=status.HTTP_400_BAD_REQUEST)
+          else:
+              instance.asiste = True
+              instance.save()
+              return Response("Se validó la asistencia correctamente", status=status.HTTP_200_OK)
+      except ObjectDoesNotExist:
+          return Response("No se encontró ninguna asistencia", status=status.HTTP_404_NOT_FOUND)
 
-            if (instance.asiste == True):
-                return Response("Se encontró la asistencia, pero ya está validada", status=status.HTTP_400_BAD_REQUEST)
-            else:
-                instance.asiste = True
-                instance.save()
-                return Response("Se validó la asistencia correctamente", status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-            return Response("No se encontró ninguna asistencia", status=status.HTTP_404_NOT_FOUND)
+  else:
+      return Response("No se aportó ningun QR", status=status.HTTP_400_BAD_REQUEST)
 
-    else:
-        return Response("No se aportó ningun QR", status=status.HTTP_400_BAD_REQUEST)
 
+@swagger_auto_schema(
+                      method='get',
+                      manual_parameters=[
+                        openapi.Parameter('id', openapi.IN_QUERY, description="Id de la asistencia", type=openapi.TYPE_INTEGER)],
+                      responses={
+                        200: QRSerializer,
+                        404: "No se encontró ninguna asistencia"
+                      }
+                    )
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def asistencia_qr(request, pk):
+  """
+  Devuelve la imagen QR (codificada en Base64) para verificar la asistencia
+  """
 
-    try:
-        instance =  Asistencia.objects.get(pk = pk)
+  try:
+      instance =  Asistencia.objects.get(pk = pk)
 
-        response = {"qr":qr_in_base64(instance.code)}
+      response = {"qr":qr_in_base64(instance.code)}
 
-        return Response(response, status=status.HTTP_200_OK)
-    except ObjectDoesNotExist:
-        return Response("No se encontró ninguna asistencia", status=status.HTTP_404_NOT_FOUND)
+      return Response(response, status=status.HTTP_200_OK)
+  except ObjectDoesNotExist:
+      return Response("No se encontró ninguna asistencia", status=status.HTTP_404_NOT_FOUND)
 
     
