@@ -3,7 +3,7 @@ from participacion.serializers import *
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.decorators import api_view, authentication_classes, schema
+from rest_framework.decorators import api_view, permission_classes, authentication_classes, schema
 from .cryptography import decrypt
 from .qr_base64 import qr_in_base64
 import ast
