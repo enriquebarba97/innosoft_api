@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from rest_framework.serializers import Serializer, FileField
+from rest_framework.serializers import FileField
 from registro.models import User 
 from django.contrib.auth.models import Group
 

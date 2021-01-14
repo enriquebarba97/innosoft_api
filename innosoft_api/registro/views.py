@@ -1,7 +1,6 @@
 from .models import User
 from rest_framework import generics, status
-from rest_framework.views import APIView
-from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.authentication import TokenAuthentication
 from .permission import *
 from .serializers import UserCreateSerializer,UpdateUserSerializer,ListUserSerializer
@@ -9,11 +8,10 @@ from rest_framework.viewsets import ViewSet
 from .serializers import UploadSerializer
 from rest_framework.response import Response
 import pandas as pd
-from django.core.files.base import ContentFile
 from django.contrib.auth.models import Group
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.decorators import api_view,action
+from rest_framework.decorators import action
 
 class ListUsersView(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)
@@ -57,7 +55,6 @@ class FileUploadView(ViewSet):
             return Response("No file provided", status=status.HTTP_400_BAD_REQUEST)
         else:
             try:
-                content_type = file_uploaded.content_type
                 tabla = pd.read_excel(file_uploaded.read())
                 cont = 0
                 cont2 = 0

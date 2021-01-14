@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from programa.models import Ponencia
-from registro.models import User
 from .cryptography import encrypt
 
 
@@ -16,6 +15,9 @@ class Asistencia(models.Model):
         ordering = ['id']
 
     def __str__(self):
+        """
+        Return string of asistencia
+        """
         return str(self.usuario) + toString(self.asiste) + " a " + str(self.ponencia)
 
     def save(self, force_insert=False, force_update=False, using=None,
