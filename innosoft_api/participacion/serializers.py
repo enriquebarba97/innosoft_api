@@ -17,3 +17,4 @@ class CodeSerializer (serializers.Serializer):
 
 class QRSerializer (serializers.Serializer):
     qr = serializers.CharField(max_length=200)
+
