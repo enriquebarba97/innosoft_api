@@ -14,5 +14,5 @@ path('auth/', include('djoser.urls.authtoken')),
 path('register/', RegisterView.as_view(), name='auth_register'),
 path('register/users', ListUsersView.as_view(), name='list_users'),
 path('register/users/<int:pk>', UpdateDeleteUserView.as_view(), name='update_delete_users'),
-path('upload/excel/', inc(router.urls))
+path('', inc(router.urls))
 ] 
