@@ -3,6 +3,9 @@ from .models import Asistencia
 
 class AsistenciaSerializer(serializers.ModelSerializer):
     class Meta:
+        """
+        meta for asistencia serializer
+        """
         model = Asistencia
         fields = ['asiste', 'usuario', 'ponencia', 'id']
 

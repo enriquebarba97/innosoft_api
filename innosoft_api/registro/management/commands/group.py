@@ -1,8 +1,3 @@
-#import os
-#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_rest_permission.settings')
-#import django
-#
-#django.setup()
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group
 

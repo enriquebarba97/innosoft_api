@@ -1,9 +1,5 @@
-import os
 from django.core.management.base import BaseCommand
-
 from django.core.management import call_command
-
-#Sets up the system
 
 class Command(BaseCommand):
     help = 'Sets up the system'

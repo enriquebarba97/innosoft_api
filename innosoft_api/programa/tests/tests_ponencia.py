@@ -1,7 +1,5 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 from programa.models import Ponencia, Ponente
 from registro.tests import BaseTestCase
 from django.utils.timezone import make_aware

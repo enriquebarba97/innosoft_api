@@ -9,6 +9,5 @@ urlpatterns = [
     path("asistencias/ponencia/<int>", AsistenciaPonenciaView.as_view(), name="asistencias_por_ponencia"),
 
     path("asistencias/check", asistencia_qr_check, name="asistencias_qr_check"),
-
     path("asistencias/qr/<int:pk>", asistencia_qr, name="qr_de_asistencia")
     ]

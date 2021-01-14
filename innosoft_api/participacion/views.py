@@ -8,7 +8,7 @@ from .cryptography import decrypt
 from .qr_base64 import qr_in_base64
 import ast
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsAdminUser, IsLoggedInUserOrAnonymous
+from .permissions import IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 
 from drf_yasg.utils import swagger_auto_schema
