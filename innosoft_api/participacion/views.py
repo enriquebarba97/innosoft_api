@@ -48,7 +48,7 @@ class AsistenciaPonenciaView(generics.ListAPIView):
                       request_body=CodeSerializer,
                       responses={
                         200: "Se validó la asistencia correctamente",
-                        400: "Se encontró la asistencia, pero ya está validada | No se aportó ningun QR",
+                        400: "Se encontró la asistencia, pero ya está validada | No se aportó ningun QR | El código no pertenece a esa asistencia",
                         404: "No se encontró ninguna asistencia"
                       }
                     )
@@ -57,13 +57,18 @@ class AsistenciaPonenciaView(generics.ListAPIView):
 #@permission_classes([IsAdminUser])
 def asistencia_qr_check(request):
   """
-  Recibe el código que contiene el QR (b'...') para validar la asistencia correspondiente
+  Recibe el código que contiene el QR (b'...') y el id de la ponencia para validar la asistencia correspondiente
   """
-  if "code" in request.data:
+  if ("code" in request.data and "asistenciaId" in request.data):
       encrypted_code = request.data["code"]
+      ponencia_id = request.data["ponenciaId"]
 
       try:
           instance =  Asistencia.objects.get(code=encrypted_code)
+
+          if (instance.ponencia.pk != ponencia_id):
+              return Response("El código no pertenece a esa ponencia", status=status.HTTP_400_BAD_REQUEST)
+
 
           password = str(instance.usuario.id) + "" + str(instance.ponencia.id)
 
