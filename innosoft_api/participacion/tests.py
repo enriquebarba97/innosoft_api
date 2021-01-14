@@ -247,7 +247,7 @@ class AsistenciaTests(BaseTestCase):
         url = reverse("asistencias_qr_check")
         BaseTestCase.get_token(self, uvus="participante")
         Asistencia.objects.get(pk=1).asiste = False
-        data = {"code":Asistencia.objects.get(pk=1).code}
+        data = {"code":Asistencia.objects.get(pk=1).code, "ponenciaId":2}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         BaseTestCase.remove_token(self)
@@ -256,7 +256,7 @@ class AsistenciaTests(BaseTestCase):
         url = reverse("asistencias_qr_check")
         BaseTestCase.get_token(self, uvus="staff")
         Asistencia.objects.get(pk=1).asiste = False
-        data = {"code":Asistencia.objects.get(pk=1).code}
+        data = {"code":Asistencia.objects.get(pk=1).code, "ponenciaId":2}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Asistencia.objects.get(pk=1).asiste, True)
@@ -266,7 +266,7 @@ class AsistenciaTests(BaseTestCase):
         url = reverse("asistencias_qr_check")
         BaseTestCase.get_token(self, uvus="staff")
         Asistencia.objects.get(pk=1).asiste = True
-        data = {"code":Asistencia.objects.get(pk=1).code}
+        data = {"code":Asistencia.objects.get(pk=1).code, "ponenciaId":2}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Asistencia.objects.get(pk=1).asiste, True)
@@ -282,6 +282,6 @@ class AsistenciaTests(BaseTestCase):
 
     def test_check_asistencias_ponencia_sin_permisos(self):
         url = reverse("asistencias_qr_check")
-        data = {"code":Asistencia.objects.get(pk=1).code}
+        data = {"code":Asistencia.objects.get(pk=1).code, "ponenciaId":2}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
