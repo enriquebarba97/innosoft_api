@@ -5,7 +5,8 @@ services:
     container_name: innosoft_api_web
     image: innosoft_api_web:latest
     build: .
-    command: bash -c "python manage.py setup && gunicorn -w 5 innosoft_api.wsgi --timeout=500 --bind 0.0.0.0:5000"
+    #command: bash -c "python manage.py setup && gunicorn -w 5 innosoft_api.wsgi --timeout=500 --bind 0.0.0.0:5000"
+    command: bash -c "python manage.py setup && python manage.py runserver 5000"
     expose:
       - "5000"
     volumes:
@@ -13,21 +14,21 @@ services:
     networks:
       - innosoft_api
 
-  nginx:
-    restart: always
-    container_name: innosoft_api_nginx
-    image: innosoft_api_nginx:latest
-    build:
-        context: .
-        dockerfile: Dockerfile-nginx
-    volumes:
-      - static:/app/static
-    ports:
-      - "8000:80"
-    depends_on:
-      - web
-    networks:
-      - innosoft_api
+  # nginx:
+  #   restart: always
+  #   container_name: innosoft_api_nginx
+  #   image: innosoft_api_nginx:latest
+  #   build:
+  #       context: .
+  #       dockerfile: Dockerfile-nginx
+  #   volumes:
+  #     - static:/app/static
+  #   ports:
+  #     - "8000:80"
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - innosoft_api
 
 volumes:
   static:
@@ -37,6 +38,6 @@ networks:
   innosoft_api:
     driver: bridge
     ipam:
-    driver: default
-    config:
-      - subnet: 10.5.0.0/16
+      driver: default
+      config:
+        - subnet: 10.5.0.0/16
