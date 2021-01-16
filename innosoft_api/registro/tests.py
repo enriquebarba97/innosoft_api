@@ -236,6 +236,7 @@ class RegistroTests(BaseTestCase):
         url = reverse('update_delete_users',kwargs={"pk":"3"})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
+
     def test_delete_alumno_sinpermiso(self):
         """
         Test para eliminar un usuario siendo participante
@@ -244,3 +245,22 @@ class RegistroTests(BaseTestCase):
         url = reverse('update_delete_users',kwargs={"pk":"3"})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 403)
+
+    #==============================================================================================
+    # Tests modelo
+
+    def test_crear_asistencia(self):
+        """
+        Aseguramos que se puede crear un usuario con datos correctos.
+        """
+        
+        User(uvus="test", email="test@gmail.com", first_name="Test1", last_name="Test2").save()
+
+        self.assertEqual(User.objects.all().count(), 8)
+
+        usuario_test = User.objects.get(pk=8)
+
+        self.assertEqual(usuario_test.uvus, "test")
+        self.assertEqual(usuario_test.email, "test@gmail.com")
+        self.assertEqual(usuario_test.first_name, "Test1")
+        self.assertEqual(usuario_test.last_name, "Test2")
