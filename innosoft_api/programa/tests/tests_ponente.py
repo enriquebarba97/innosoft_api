@@ -204,3 +204,21 @@ class PonenteTests(BaseTestCase):
         self.assertEqual(second_ponente.name, "Updated Name 2")
 
         self.remove_token()
+
+    #==============================================================================================
+    # Tests modelo
+
+    def test_crear_ponente(self):
+        """
+        Aseguramos que se puede crear un ponente con datos correctos.
+        """
+        Ponente(name="Ponente", surname="Test", phone="123456789", email="ponentetest@gmail.com").save()
+        
+        self.assertEqual(Ponente.objects.all().count(), 3)
+
+        ponente_test = Ponente.objects.get(pk=3)
+
+        self.assertEqual(ponente_test.name, "Ponente")
+        self.assertEqual(ponente_test.surname, "Test")
+        self.assertEqual(ponente_test.phone, "123456789")
+        self.assertEqual(ponente_test.email, "ponentetest@gmail.com")
