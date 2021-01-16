@@ -150,6 +150,12 @@ REST_FRAMEWORK = {
   ), 
 }
 
+try:
+    from local_settings import *
+except ImportError:
+    print("local_settings.py not found")
+    
+STATIC_ROOT = '../innosoft_api/staticfiles/'
 
 if 'I_AM_HEROKU' in os.environ:
     # Configure Django App for Heroku.
