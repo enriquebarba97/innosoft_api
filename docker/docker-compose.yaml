@@ -1,12 +1,26 @@
 version: '3'
 services:
   web:
+    restart: always
+    container_name: innosoft_web
+    image: innosoft_web:latest
     build: .
-    command: bash -c "python ./innosoft_api/manage.py setup && python ./innosoft_api/manage.py runserver 0.0.0.0:9000"
+    command: bash -c "python manage.py setup && gunicorn -w 5 innosoft_api.wsgi --timeout=500 -b 0.0.0.0:5000"
+    expose:
+      - "5000"
     volumes:
-      - .:/code
-    ports:
-      - "9000:9000"
-    environment:
-      - DJANGO_SETTINGS_MODULE=innosoft_api.settings
-      - SECRET_KEY=${SECRET_KEY} 
+      - static:/app/static
+    networks:
+      - innosoft_api
+
+volumes:
+  static:
+    name: innosoft_api_static
+
+networks:
+  innosoft_api:
+    driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 10.5.0.0/16
