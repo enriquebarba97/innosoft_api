@@ -6,13 +6,15 @@ services:
     image: innosoft_api_web:latest
     build: .
     #command: bash -c "python manage.py setup && gunicorn -w 5 innosoft_api.wsgi --timeout=500 --bind 0.0.0.0:5000"
-    command: bash -c "python manage.py setup && python manage.py runserver 5000"
-    expose:
-      - "5000"
+    command: bash -c "python manage.py setup && python manage.py runserver 0.0.0.0:9000"
+    ports:
+      - "9000:9000"
+    # expose:
+    #   - "9000"
     volumes:
       - static:/app/static
-    networks:
-      - innosoft_api
+    # networks:
+    #   - innosoft_api
 
   # nginx:
   #   restart: always
@@ -34,10 +36,10 @@ volumes:
   static:
       name: innosoft_api_static
 
-networks:
-  innosoft_api:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.5.0.0/16
+# networks:
+#   innosoft_api:
+#     driver: bridge
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: 10.5.0.0/16

@@ -17,3 +17,5 @@ WORKDIR /app/innosoft_api/innosoft_api
 WORKDIR /app/innosoft_api
 
 RUN ./manage.py collectstatic
+
+EXPOSE 9000
