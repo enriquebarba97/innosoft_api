@@ -1,13 +1,12 @@
 version: '3'
 services:
   web:
-    #restart: always
     build: .
-    #command: bash -c "ls && cd innosoft_api && ls && python ./innosoft_api/manage.py setup && python ./innosoft_api/manage.py runserver 0.0.0.0:9000"
+    command: bash -c "python ./innosoft_api/manage.py setup && python ./innosoft_api/manage.py runserver 0.0.0.0:9000"
     volumes:
       - .:/code
     ports:
       - "9000:9000"
     environment:
       - DJANGO_SETTINGS_MODULE=innosoft_api.settings
-      - SECRET_KEY=${SECRET_KEY}
+      - SECRET_KEY=${SECRET_KEY} 
