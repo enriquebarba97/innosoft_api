@@ -43,7 +43,7 @@ class FileUploadView(ViewSet):
                             in_=openapi.IN_FORM,
                             type=openapi.TYPE_FILE,
                             required=True,
-                            description="Documento excel en formato xlsx con los usuarios a añadir a partir de la linea 6, siguiendo la plantilla aportada por el profesor."
+                            description="Documento excel en formato xls con los usuarios a añadir a partir de la linea 8, siguiendo la plantilla aportada por el profesor."
                             )],
         responses={400: 'Invalid data in uploaded file',
                    200: 'Success'},
