@@ -24,7 +24,9 @@ SECRET_KEY = '!icbr#eln*pb8^z5o1%wfbhx@y6hi)kq98-%#r_61$fkl&uj!3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1', '.herokuapp.com']
+
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', 'localhost', '0.0.0.0']
+
 
 
 # Application definition
@@ -150,6 +152,12 @@ REST_FRAMEWORK = {
   ), 
 }
 
+try:
+    from .local_settings import *
+except ImportError:
+    print("local_settings.py not found")
+    
+STATIC_ROOT = '../innosoft_api/staticfiles/'
 
 if 'I_AM_HEROKU' in os.environ:
     # Configure Django App for Heroku.
