@@ -12,7 +12,7 @@ class AsistenciaSerializer(serializers.ModelSerializer):
 class AsistenciaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asistencia
-        fields = ['usuario', 'ponencia', 'id']
+        fields = ['ponencia', 'id']
 
 class CodeSerializer (serializers.Serializer):
     code = serializers.CharField(max_length=200)

@@ -1,8 +1,10 @@
 # INNOSOFT-API
 
 ![](https://github.com/enriquebarba97/innosoft_api/workflows/Django%20Tests/badge.svg)
+[![Build Status](https://travis-ci.com/enriquebarba97/innosoft_api.svg?branch=develop)](https://travis-ci.com/enriquebarba97/innosoft_api)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bac4b8376e0b427ba8763fe6c6ee7d6c)](https://app.codacy.com/gh/enriquebarba97/innosoft_api?utm_source=github.com&utm_medium=referral&utm_content=enriquebarba97/innosoft_api&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/eaf00d3bd6aa41348b643b4a422243de)](https://www.codacy.com/gh/enriquebarba97/innosoft_api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=enriquebarba97/innosoft_api&amp;utm_campaign=Badge_Coverage)
+
 
 ## INTRODUCCIÓN
 

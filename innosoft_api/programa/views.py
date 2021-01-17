@@ -22,7 +22,7 @@ class CreatePonenteView(generics.CreateAPIView):
   vista para crear ponentes, el usuario administrador es el unico que puede crearlos
   """
   authentication_classes = (TokenAuthentication,)
-  permission_classes = [AdminPass]
+  permission_classes = [IsAdminUser]
   #lookup_field = 'id'
   queryset = Ponente.objects.all()
   serializer_class = PonenteSerializer
@@ -32,7 +32,7 @@ class PonenteRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
   vista para actualizar, eliminar y ver un ponente, el usuario administrador es el unico que puede acceder
   """
   authentication_classes = (TokenAuthentication,)
-  permission_classes = [AdminPass]
+  permission_classes = [IsAdminUser]
   #lookup_field = 'id'
   queryset = Ponente.objects.all()
   serializer_class = PonenteSerializer
@@ -52,7 +52,7 @@ class CreatePonenciaView(generics.CreateAPIView):
   vista para crear ponencias, el usuario administrador es el unico que puede crearlas
   """
   authentication_classes = (TokenAuthentication,)
-  permission_classes = [AdminPass]
+  permission_classes = [IsAdminUser]
   queryset = Ponencia.objects.all()
   serializer_class = PonenciaSerializer
 
@@ -61,7 +61,7 @@ class PonenciaRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
   vista para actualizar, eliminar y ver una ponencia, el usuario administrador es el unico que puede acceder
   """
   authentication_classes = (TokenAuthentication,)
-  permission_classes = [AdminPass]
+  permission_classes = [IsAdminUser]
   #lookup_field = 'id'
   queryset = Ponencia.objects.all()
   serializer_class = PonenciaSerializer
