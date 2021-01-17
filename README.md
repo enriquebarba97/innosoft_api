@@ -20,21 +20,7 @@ Innosoft-api es un proyecto para la gestión y automatización del programa de l
  
 ## INSTALACIÓN
  
-Para instalar nuestra aplicación, en primer lugar se deberá clonar el proyecto en la ubicación deseada, tras esto, se instalarán los requisitos de este de la siguiente manera:
-
-	pip install -r requirements.txt
-
-Una vez instalados los requisitos se deberá ejecutar el archivo de setup con el siguiente comando:
-
-	python .\manage.py setup
-
-Tras realizar las pasos anteriores el proyecto ya estará listo para funcionar, a continuación se deberá usar el siguiente comando para que la aplicación sea accesible desde "localhost:8000":
-
-	python .\manage.py runserver
-
-## EJECUCIÓN CON DOCKER
-
-Ejecucion con docker
+Tanto la instalación como el despliegue del proyecto en todas sus formas se define en profundidad en el apartado "Gestión del despliegue" del documento del proyecto.
 
 ## TEST DE ESTRÉS CON LOCUST
 
