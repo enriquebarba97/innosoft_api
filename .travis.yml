@@ -1,0 +1,12 @@
+dist: ubuntu
+
+language: python
+python:
+  - "3.8"
+install:
+  - python -m pip install --upgrade pip
+  - pip install -r requirements.txt
+script:
+  - cd innosoft_api/
+  - python manage.py setup
+  - python manage.py test
