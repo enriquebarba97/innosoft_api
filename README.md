@@ -20,7 +20,7 @@ Innosoft-api es un proyecto para la gestión y automatización del programa de l
  
 ## INSTALACIÓN
  
-Tanto la instalación como el despliegue del proyecto en todas sus formas se define en profundidad en el apartado "Gestión del despliegue" del documento del proyecto.
+Tanto la instalación como el despliegue del proyecto en todas sus formas se define en profundidad en el apartado [Gestión del despliegue](https://github.com/enriquebarba97/innosoft_api/wiki/Documento-del-Proyecto/_edit) del documento del proyecto.
 
 ## TEST DE ESTRÉS CON LOCUST
 
