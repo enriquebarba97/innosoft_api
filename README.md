@@ -38,4 +38,27 @@ Ejecucion con docker
 
 ## TEST DE ESTRÉS CON LOCUST
 
-Test de estrés con locust
+Para la ejecución de los test de estrés con locust, es necesario instalarlo de la siguiente forma:
+
+	pip install locust
+	
+En el directorio de loadtest se encuentra el fichero locustfile.py que contiene las configuración a ejecutar. En nuestro caso tenemos dos ejemplos:
+
+1. Visualizer: entra en el visualizador de las ponencias y de los ponentes.
+
+       locust Visualizer
+       
+Al ejecutar este comando se abrirá un servidor que podremos ver en el navegador, el mismo comando nos dirá el puerto. Cuando se abra, nos preguntará cuantos usuarios queremos que hagan peticiones a la vez, y como queremos que vaya creciendo hasta llegar a ese número. Por ejemplo, si ponemos 100 y 5, estaremos creando 5 nuevos usuarios cada segundo hasta llegar a 100.
+
+2. ShowPonente: utilizaremos ponentes previamente creados, y haremos una secuencia de peticiones: authorization y getPonenteById. Esto es lo que realizaría un usuario administrador para consultar un Ponente. Para que este script funcione necesitaremos tener instalado requests:
+
+       pip install requests
+       
+Una vez instalado ejecutamos el script de población gen_ponentes.py:
+       
+       python gen_ponentes.py
+       
+Ahora ya podemos proceder con el test de estrés:
+
+       locust ShowPonente
+      
