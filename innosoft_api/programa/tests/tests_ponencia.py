@@ -276,3 +276,22 @@ class PonenciaTests(BaseTestCase):
         self.assertEqual(ponencia.name, "Updated Name 2")
 
         self.remove_token()
+
+    #==============================================================================================
+    # Tests modelo
+
+    def test_crear_ponencia(self):
+        """
+        Aseguramos que se puede crear una ponencia con datos correctos.
+        """
+        tiempo = make_aware(datetime.datetime.now()+datetime.timedelta(hours=5))
+        Ponencia(name="Ponencia test 1", description="Descripción test 1", time=tiempo, place="Sitio test 1").save()
+        
+        self.assertEqual(Ponencia.objects.all().count(), 3)
+
+        ponencia_test = Ponencia.objects.get(pk=3)
+
+        self.assertEqual(ponencia_test.name, "Ponencia test 1")
+        self.assertEqual(ponencia_test.description, "Descripción test 1")
+        self.assertEqual(ponencia_test.place, "Sitio test 1")
+        self.assertEqual(ponencia_test.time, tiempo)

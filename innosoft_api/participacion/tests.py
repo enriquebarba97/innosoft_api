@@ -284,3 +284,22 @@ class AsistenciaTests(BaseTestCase):
         data = {"code":Asistencia.objects.get(pk=1).code, "ponenciaId":2}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    #==============================================================================================
+    # Tests modelo
+    
+    def test_crear_asistencia(self):
+        """
+        Aseguramos que se puede crear una asistencia con datos correctos.
+        """
+        
+        Asistencia(usuario=User.objects.get(pk=1), ponencia=Ponencia.objects.get(pk=2)).save()
+
+        self.assertEqual(Asistencia.objects.all().count(), 6)
+
+        asistencia_test = Asistencia.objects.get(pk=6)
+
+        self.assertEqual(asistencia_test.usuario, User.objects.get(pk=1))
+        self.assertEqual(asistencia_test.ponencia, Ponencia.objects.get(pk=2))
+        self.assertEqual(asistencia_test.asiste, False)
+        self.assertNotEqual(len(asistencia_test.code), 0)
