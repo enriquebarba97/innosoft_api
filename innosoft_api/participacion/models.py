@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from programa.models import Ponencia
 from .cryptography import encrypt
+import random
 
 
 class Asistencia(models.Model):
@@ -23,7 +24,7 @@ class Asistencia(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
 
-        uncoded_string = "Usuario%s Ponencia%s" % (self.usuario.pk, self.ponencia.pk)
+        uncoded_string = "Usuario%s Ponencia%s Random%d" % (self.usuario.pk, self.ponencia.pk, random.randint(1,999))
 
         password = str(self.usuario.id) + "" + str(self.ponencia.id)
 
